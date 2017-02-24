@@ -80,16 +80,13 @@ class CorsResponseEventSubscriber implements EventSubscriberInterface {
       if ($page_match) {
         if (!empty($settings[0])) {
           $origins = array_map('trim', explode(',', $settings[0]));
-          foreach ($origins as $origin) {
-            if ($origin === '<mirror>') {
-              if (!empty($request_headers['Origin'])) {
-                $headers_per_path[$path]['Access-Control-Allow-Origin'][] = $request_headers['Origin'];
-              }
-            }
-            else {
-              $headers_per_path[$path]['Access-Control-Allow-Origin'][] = $origin;
-            }
+
+          if(in_array($request_headers['origin'], $origins) || in_array('<mirror>', $origins)){
+            $headers_per_path[$path]['Access-Control-Allow-Origin'][] = $request_headers['origin'];
+          } else {
+            $headers_per_path[$path]['Access-Control-Allow-Origin'][] = $origins[0];
           }
+
           $headers_per_path[$path]['Access-Control-Allow-Origin'] = implode(', ', $headers_per_path[$path]['Access-Control-Allow-Origin']);
         }
         if (!empty($settings[1])) {
