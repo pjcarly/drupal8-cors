@@ -96,6 +96,10 @@ class CorsResponseEventSubscriber implements EventSubscriberInterface
               $headers_per_path[$path]['Access-Control-Allow-Origin'] = $request_headers['origin'][0];
             }
           }
+          else if(is_array($origins) && sizeof($origins) > 0)
+          {
+            $headers_per_path[$path]['Access-Control-Allow-Origin'] = $origins[0];
+          }
 
           // if we didnt find an origin. lets set one
           if(!array_key_exists('Access-Control-Allow-Origin', $headers_per_path[$path]))
